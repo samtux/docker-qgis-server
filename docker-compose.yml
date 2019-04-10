@@ -1,13 +1,19 @@
 version: '3'
 services:
-  qgisserver:
-    #image: qgisco/qgis-server:latest
-    build: .
+  lizmap:
+    image: 'jancelin/docker-lizmap:latest'
     volumes:
-      - ./projects:/home/qgis/projects
-      - ./geodata:/home/qgis/geodata
-      - ./plugins:/home/qgis/plugins
-      - ./config/entrypoint.sh:/root/entrypoint.sh
-      - ./config/qgis.demo.conf:/etc/apache2/sites-available/qgis.demo.conf
+      - '/home/samtux/Documentos/lizmap/projects:/home/qgis/projects'
+      - './var:/var/www/websig/lizmap/var'
+    depends_on:
+      - qgisserver
+  qgisserver:
+    build: .
     ports:
-      - 8080:8080
+      - '8080:8080'
+    volumes:
+      - '/home/samtux/Documentos/lizmap/projects:/home/qgis/projects'
+      - './geodata:/home/qgis/geodata'
+      - './plugins:/home/qgis/plugins'
+      - './config/entrypoint.sh:/root/entrypoint.sh'
+      - './config/qgis.demo.conf:/etc/apache2/sites-available/qgis.demo.conf'
